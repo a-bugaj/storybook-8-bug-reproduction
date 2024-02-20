@@ -21,8 +21,17 @@ export const LabelStory: Story = {
 };
 
 export const LabelStory2: Story = {
-  name: "label (non-working component)",
+  name: "label (non-working component) #1",
   args: {
     label: <span>random text</span>,
+  },
+};
+
+export const LabelStory3: Story = {
+  name: "label (non-working component) #2",
+  args: {
+    label: 'Hi, this component should fully works...',
+    // @ts-ignore
+    randomUnhandledPropInComponent: <span>...but trying to pass JSX prop causes it to crash:/</span>
   },
 };

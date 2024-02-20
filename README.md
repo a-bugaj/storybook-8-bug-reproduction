@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Storybook 8.0.0-beta.3 bug reproduction
 
-## Getting Started
+![Bug screen](./docs/error.png)
 
-First, run the development server:
+This repository demonstrates an existing bug in Storybook version 8.0.0-beta.3 (also occurring in 8.0.0-beta.2).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Steps to preproduce:
+- Clone the repository
+- npm run install
+- npm run storybook
+- Go to story "label (non-working-component 1 or 2)"
+
+--- 
+
+Reproducing this is trivially simple, all you need to do is define Stories that pass JSX to the used component instead of just a string.
+
+Example:
+
+<b>Working stories: ✅ </b>
+
+```tsx
+export const LabelStory: Story = {
+  name: "label (working component)",
+  args: {
+    label: 'Hi, this component fully works.',
+  },
+};
+```
+<b>Non-working stories: ❌</b>
+
+```tsx
+export const LabelStory2: Story = {
+  name: "label (non-working component)",
+  args: {
+    label: <span>Hi, this component causes storybook crash :(</span>,
+  },
+};
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+It also doesn't matter whether the prop provided in `args` is handled in the component.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Example:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```tsx
+export const LabelStory3: Story = {
+    name: "label (non-working component)",
+    args: {
+        label: 'Hi, this component should fully works...',
+        randomUnhandledPropInComponent: <span>...but trying to pass JSX prop causes it to crash:/</span>
+    },
+};
+```
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
