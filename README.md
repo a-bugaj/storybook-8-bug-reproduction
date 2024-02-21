@@ -1,5 +1,7 @@
 # Storybook 8.0.0-beta.3 bug reproduction
 
+Issue: https://github.com/storybookjs/storybook/issues/26111
+
 ![Bug screen](./docs/error.png)
 
 This repository demonstrates an existing bug in Storybook version 8.0.0-beta.3 (also occurring in 8.0.0-beta.2).
